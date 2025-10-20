@@ -1,0 +1,6 @@
+/home/oooo/Escritorio/distribuida/sistema-distribuido/backend/rmi-interfaces/src/main/java/com/distribuido/interfaces/IArchivo.java
+/home/oooo/Escritorio/distribuida/sistema-distribuido/backend/rmi-interfaces/src/main/java/com/distribuido/interfaces/IBalanceadorCarga.java
+/home/oooo/Escritorio/distribuida/sistema-distribuido/backend/rmi-interfaces/src/main/java/com/distribuido/interfaces/INodo.java
+/home/oooo/Escritorio/distribuida/sistema-distribuido/backend/rmi-interfaces/src/main/java/com/distribuido/interfaces/IAuditor.java
+/home/oooo/Escritorio/distribuida/sistema-distribuido/backend/rmi-interfaces/src/main/java/com/distribuido/interfaces/IUsuario.java
+/home/oooo/Escritorio/distribuida/sistema-distribuido/backend/rmi-interfaces/src/main/java/com/distribuido/interfaces/IControladorSeguridad.java

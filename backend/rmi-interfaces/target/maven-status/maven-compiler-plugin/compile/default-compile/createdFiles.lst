@@ -1,0 +1,6 @@
+com/distribuido/interfaces/IUsuario.class
+com/distribuido/interfaces/IAuditor.class
+com/distribuido/interfaces/IArchivo.class
+com/distribuido/interfaces/IControladorSeguridad.class
+com/distribuido/interfaces/IBalanceadorCarga.class
+com/distribuido/interfaces/INodo.class
