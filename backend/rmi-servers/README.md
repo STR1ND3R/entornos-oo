@@ -1,0 +1,1 @@
+Run each server with `java -cp target/classes:...` after building; servers listen on ports 1099,1100,1101 respectively.
