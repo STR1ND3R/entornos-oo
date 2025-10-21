@@ -1,0 +1,7 @@
+═══════════════════════════════════════════════
+⚖️ Servidor de Balanceador listo en puerto 1104
+   Algoritmos disponibles:
+   - ROUND_ROBIN (por defecto)
+   - LEAST_CONNECTIONS
+   - LEAST_LOAD
+═══════════════════════════════════════════════

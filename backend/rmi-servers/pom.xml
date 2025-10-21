@@ -1,13 +1,33 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.distribuido</groupId>
-  <artifactId>rmi-servers</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <dependencies>
-    <!-- depends on interfaces and impl -->
-  </dependencies>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.distribuido</groupId>
+    <artifactId>rmi-servers</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.distribuido</groupId>
+            <artifactId>rmi-interfaces</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../rmi-interfaces/target/rmi-interfaces-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.distribuido</groupId>
+            <artifactId>rmi-impl</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../rmi-impl/target/rmi-impl-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,0 +1,7 @@
+═══════════════════════════════════════════════
+🔐 Servidor de Seguridad listo en puerto 1103
+   Funciones:
+   - Generación y validación de tokens JWT
+   - Verificación de permisos
+   - Encriptación AES de datos
+═══════════════════════════════════════════════
