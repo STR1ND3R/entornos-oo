@@ -8,18 +8,44 @@ export default function Dashboard({ usuario }) {
     tiempoSesion: 0
   });
 
-  useEffect(() => {
-    // Simular carga de estadísticas
-    const startTime = Date.now();
+  const [estadoServicios, setEstadoServicios] = useState({
+    usuarios: true,
+    archivos: true,
+    auditoria: true,
+    nodos: true,
+    seguridad: true,
+    balanceador: true
+  });
 
+  const [ultimaActualizacion, setUltimaActualizacion] = useState(new Date());
+
+  // Timer de sesión
+  useEffect(() => {
+    const startTime = Date.now();
     const interval = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      setStats(prev => ({
-        ...prev,
-        tiempoSesion: elapsed
-      }));
+      setStats(prev => ({ ...prev, tiempoSesion: elapsed }));
     }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
+  // Verificar estado de servicios cada 5 segundos
+  useEffect(() => {
+    const verificarEstado = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/monitor/estado');
+        const data = await res.json();
+
+        setEstadoServicios(data.servicios);
+        setStats(prev => ({ ...prev, nodosActivos: data.nodosActivos }));
+        setUltimaActualizacion(new Date(data.timestamp));
+      } catch (e) {
+        console.error('Error verificando estado:', e);
+      }
+    };
+
+    verificarEstado(); // Primera verificación
+    const interval = setInterval(verificarEstado, 5000); // Cada 5 segundos
     return () => clearInterval(interval);
   }, []);
 
@@ -32,7 +58,7 @@ export default function Dashboard({ usuario }) {
   return (
     <div className="dashboard">
       <div className="welcome-banner">
-        <h2>¡Bienvenido de nuevo, {usuario}! 👋</h2>
+        <h2>Bienvenido de nuevo, {usuario}</h2>
         <p>Tu sistema distribuido está funcionando correctamente</p>
       </div>
 
@@ -55,11 +81,11 @@ export default function Dashboard({ usuario }) {
           </div>
         </div>
 
-        <div className="stat-card info">
+        <div className={`stat-card ${stats.nodosActivos === 6 ? 'info' : 'danger'}`}>
           <div className="stat-icon">🖥️</div>
           <div className="stat-content">
             <h3>Nodos</h3>
-            <p className="stat-number">{stats.nodosActivos}</p>
+            <p className="stat-number">{stats.nodosActivos}/6</p>
             <p className="stat-label">Servicios activos</p>
           </div>
         </div>
@@ -74,9 +100,15 @@ export default function Dashboard({ usuario }) {
         </div>
       </div>
 
+      {stats.nodosActivos < 6 && (
+        <div className="alerta-sistema">
+          ⚠️ Atención: {6 - stats.nodosActivos} servicio(s) inactivo(s)
+        </div>
+      )}
+
       <div className="dashboard-grid">
         <div className="info-card">
-          <h3>🔐 Seguridad del Sistema</h3>
+          <h3>Seguridad del Sistema</h3>
           <div className="feature-list">
             <div className="feature-item">
               <span className="check">✓</span>
@@ -98,7 +130,7 @@ export default function Dashboard({ usuario }) {
         </div>
 
         <div className="info-card">
-          <h3>⚖️ Balanceo de Carga</h3>
+          <h3>Balanceo de Carga</h3>
           <div className="feature-list">
             <div className="feature-item">
               <span className="badge">ACTIVO</span>
@@ -116,7 +148,7 @@ export default function Dashboard({ usuario }) {
         </div>
 
         <div className="info-card">
-          <h3>🛡️ Tolerancia a Fallos</h3>
+          <h3>Tolerancia a Fallos</h3>
           <div className="feature-list">
             <div className="feature-item">
               <span className="check">✓</span>
@@ -139,43 +171,48 @@ export default function Dashboard({ usuario }) {
       </div>
 
       <div className="services-status">
-        <h3>Estado de Servicios RMI</h3>
+        <div className="section-header">
+          <h3>Estado de Servicios RMI</h3>
+          <span className="ultima-actualizacion">
+            Actualizado: {ultimaActualizacion.toLocaleTimeString()}
+          </span>
+        </div>
         <div className="services-list">
-          <div className="service-item active">
+          <div className={`service-item ${estadoServicios.nodos ? 'active' : 'inactive'}`}>
             <span className="status-indicator"></span>
             <span className="service-name">ServidorNodos</span>
             <span className="service-port">:1102</span>
-            <span className="service-status">Activo</span>
+            <span className="service-status">{estadoServicios.nodos ? 'Activo' : 'Inactivo'}</span>
           </div>
-          <div className="service-item active">
+          <div className={`service-item ${estadoServicios.seguridad ? 'active' : 'inactive'}`}>
             <span className="status-indicator"></span>
             <span className="service-name">ServidorSeguridad</span>
             <span className="service-port">:1103</span>
-            <span className="service-status">Activo</span>
+            <span className="service-status">{estadoServicios.seguridad ? 'Activo' : 'Inactivo'}</span>
           </div>
-          <div className="service-item active">
+          <div className={`service-item ${estadoServicios.balanceador ? 'active' : 'inactive'}`}>
             <span className="status-indicator"></span>
             <span className="service-name">ServidorBalanceador</span>
             <span className="service-port">:1104</span>
-            <span className="service-status">Activo</span>
+            <span className="service-status">{estadoServicios.balanceador ? 'Activo' : 'Inactivo'}</span>
           </div>
-          <div className="service-item active">
+          <div className={`service-item ${estadoServicios.usuarios ? 'active' : 'inactive'}`}>
             <span className="status-indicator"></span>
             <span className="service-name">ServidorUsuarios</span>
             <span className="service-port">:1099</span>
-            <span className="service-status">Activo</span>
+            <span className="service-status">{estadoServicios.usuarios ? 'Activo' : 'Inactivo'}</span>
           </div>
-          <div className="service-item active">
+          <div className={`service-item ${estadoServicios.archivos ? 'active' : 'inactive'}`}>
             <span className="status-indicator"></span>
             <span className="service-name">ServidorArchivos</span>
             <span className="service-port">:1100</span>
-            <span className="service-status">Activo</span>
+            <span className="service-status">{estadoServicios.archivos ? 'Activo' : 'Inactivo'}</span>
           </div>
-          <div className="service-item active">
+          <div className={`service-item ${estadoServicios.auditoria ? 'active' : 'inactive'}`}>
             <span className="status-indicator"></span>
             <span className="service-name">ServidorAuditoria</span>
             <span className="service-port">:1101</span>
-            <span className="service-status">Activo</span>
+            <span className="service-status">{estadoServicios.auditoria ? 'Activo' : 'Inactivo'}</span>
           </div>
         </div>
       </div>
